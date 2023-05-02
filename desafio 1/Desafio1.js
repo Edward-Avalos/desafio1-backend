@@ -1,4 +1,4 @@
-class productManager{
+class Product{
     constructor(title, description, price, thumbnail, code, stock){
         this.title = title;
         this.description = description;
@@ -7,22 +7,27 @@ class productManager{
         this.code = code;
         this.stock = stock;
     }
+}
+
+class productManager{
+    constructor(){
+        this.arrayProductos = [];
+    }
     
-    addProduct(objProduct, arrayProductos){
+    addProduct(objProduct){
         let existeCode = false;
-        existeCode = arrayProductos.some((p) => p.code == objProduct.code);
+        existeCode = this.arrayProductos.some((p) => p.code == objProduct.code);
         while (existeCode) {
             objProduct.code = Math.random();
-            existeCode = arrayProductos.some((p) => p.code == objProduct.code);
+            existeCode = this.arrayProductos.some((p) => p.code == objProduct.code);
         }
-        arrayProductos.push(objProduct);
-        return arrayProductos;
+        this.arrayProductos.push(objProduct);
     }
-    getProducts (arrayProductos){
-        return arrayProductos;
+    getProducts(){
+        return this.arrayProductos;
     }
-    getProductsById (code, arrayProductos){
-        let objProductFilter = arrayProductos.filter((p) => p.code == code);
+    getProductsById (code){
+        let objProductFilter = this.arrayProductos.filter((p) => p.code == code);
         if (objProductFilter.length == 0){
             return "Not found";
         }
@@ -31,20 +36,25 @@ class productManager{
         }
     }
 }
-let arrayProductos = [];
+
 let objProduct = new productManager();
-arrayProductos = objProduct.addProduct(new productManager("tomate", "tomate silvestre", 5, "img", Math.random(), 50), arrayProductos);
+objProduct.addProduct(new Product("tomate", "tomate silvestre", 5, "img", Math.random(), 50));
+
 
 let arrayNuevosObjProductos = [
-    new productManager("queso", "queso rancio", 5, "imgQueso", Math.random(), 34),
-    new productManager("fresa", "fresa grande", 5, "imgFresa", Math.random(), 45),
-    new productManager("granada", "granada roja", 5, "imgGranada", Math.random(), 12)
+    new Product("queso", "queso rancio", 5, "imgQueso", Math.random(), 34),
+    new Product("fresa", "fresa grande", 5, "imgFresa", Math.random(), 45),
+    new Product("granada", "granada roja", 5, "imgGranada", Math.random(), 12)
 ]
 arrayNuevosObjProductos.forEach(obj => {
-    arrayProductos = objProduct.addProduct(obj, arrayProductos);
+    objProduct.addProduct(obj);
 });
 
-
-console.log(objProduct.getProducts(arrayProductos));
-console.log(objProduct.getProductsById(arrayProductos[2].code, arrayProductos));
-console.log(objProduct.getProductsById(1123123, arrayProductos));
+console.log("Lista de productos");
+console.log(objProduct.getProducts());
+let arrayProductos = [];
+arrayProductos = objProduct.getProducts();
+console.log("Filtra producto existen");
+console.log(objProduct.getProductsById(arrayProductos[2].code));
+console.log("Filtra producto inexistente");
+console.log(objProduct.getProductsById(1123123));
